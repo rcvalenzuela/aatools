@@ -3,8 +3,7 @@
 # %% auto 0
 __all__ = ['plot_univariate_continuous', 'rr_corr', 'corr_graph']
 
-# %% ../00_core.ipynb 2
-from nbdev.showdoc import *
+# %% ../00_core.ipynb 3
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -12,7 +11,7 @@ import seaborn as sns
 import networkx as nx
 import sklearn.feature_selection as skfl
 
-# %% ../00_core.ipynb 12
+# %% ../00_core.ipynb 13
 def plot_univariate_continuous(df:pd.DataFrame, # Data
                                var:str, # Variable to plot
                                var_name:str, # Variable name
@@ -57,7 +56,7 @@ def plot_univariate_continuous(df:pd.DataFrame, # Data
    
     return ax
 
-# %% ../00_core.ipynb 17
+# %% ../00_core.ipynb 18
 def rr_corr(df:pd.DataFrame, # Data
             ratio_vars:list): # Columns in `df` with ratio variables
     """
@@ -82,7 +81,7 @@ def rr_corr(df:pd.DataFrame, # Data
     
     return df_corr.sort_values('abs_corr', ascending=False)
 
-# %% ../00_core.ipynb 25
+# %% ../00_core.ipynb 26
 def corr_graph(cdf:pd.DataFrame, # A dataframe as output by `ratio_corr`
                abs_corr_threshold:float = 0.5): # Threshold for high correlation
         
