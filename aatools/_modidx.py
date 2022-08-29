@@ -5,9 +5,6 @@ d = { 'settings': { 'branch': 'master',
                 'doc_host': 'https://rcvalenzuela.github.io',
                 'git_url': 'https://github.com/rcvalenzuela/aatools',
                 'lib_path': 'aatools'},
-  'syms': { 'aatools.core': { 'aatools.core.corr_graph': ( 'https://rcvalenzuela.github.io/core.html#corr_graph',
-                                                           'https://github.com/rcvalenzuela/aatools/blob/master/aatools/core.py#L85'),
-                              'aatools.core.plot_univariate_continuous': ( 'https://rcvalenzuela.github.io/core.html#plot_univariate_continuous',
-                                                                           'https://github.com/rcvalenzuela/aatools/blob/master/aatools/core.py#L15'),
-                              'aatools.core.rr_corr': ( 'https://rcvalenzuela.github.io/core.html#rr_corr',
-                                                        'https://github.com/rcvalenzuela/aatools/blob/master/aatools/core.py#L60')}}}
+  'syms': { 'aatools.core': { 'aatools.core.corr_graph': ('core.html#corr_graph', 'aatools/core.py'),
+                              'aatools.core.plot_univariate_continuous': ('core.html#plot_univariate_continuous', 'aatools/core.py'),
+                              'aatools.core.rr_corr': ('core.html#rr_corr', 'aatools/core.py')}}}
