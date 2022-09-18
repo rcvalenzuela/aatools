@@ -20,7 +20,7 @@ conda install -c rcvalenzuela aatools
 ## How to use
 
 Currently the package only provides one function
-[`plot_univariate_continuous`](https://rcvalenzuela.github.io/aatools/core.html#plot_univariate_continuous)
+[`plot_univariate_continuous`](https://rcvalenzuela.github.io/aatools/eda.html#plot_univariate_continuous)
 which given a sample of data from a univariate random variable generates
 the histogram and adds information on the mean and the quartiles
 
