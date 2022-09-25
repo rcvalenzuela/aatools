@@ -9,7 +9,10 @@ d = { 'settings': { 'branch': 'master',
                               'aatools.core.rr_corr': ('core.html#rr_corr', 'aatools/core.py'),
                               'aatools.core.soa_graph': ('core.html#soa_graph', 'aatools/core.py'),
                               'aatools.core.strength_of_assoc': ('core.html#strength_of_assoc', 'aatools/core.py')},
+            'aatools.datasets': {'aatools.datasets.load_transport': ('datasets.html#load_transport', 'aatools/datasets.py')},
             'aatools.eda': { 'aatools.eda.plot_univariate_continuous': ('eda.html#plot_univariate_continuous', 'aatools/eda.py'),
                              'aatools.eda.rr_corr': ('eda.html#rr_corr', 'aatools/eda.py'),
                              'aatools.eda.soa_graph': ('eda.html#soa_graph', 'aatools/eda.py'),
-                             'aatools.eda.strength_of_assoc': ('eda.html#strength_of_assoc', 'aatools/eda.py')}}}
+                             'aatools.eda.strength_of_assoc': ('eda.html#strength_of_assoc', 'aatools/eda.py')},
+            'aatools.model_evaluation': { 'aatools.model_evaluation.metrics_by_threshold': ( 'model_evaluation.html#metrics_by_threshold',
+                                                                                             'aatools/model_evaluation.py')}}}
