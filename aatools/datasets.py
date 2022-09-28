@@ -3,11 +3,12 @@
 # %% auto 0
 __all__ = ['load_transport']
 
-# %% ../02_datasets.ipynb 5
+# %% ../02_datasets.ipynb 6
 def load_transport():
     "Loads the transport dataset"
     
     transport_url = 'https://raw.githubusercontent.com/rcvalenzuela/aatools-data/main/transport.csv'
     transport = pd.read_csv(transport_url, sep=';')
+    transport = transport.drop(['num'], axis=1)
     
     return transport
