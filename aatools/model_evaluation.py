@@ -3,12 +3,6 @@
 # %% auto 0
 __all__ = ['metrics_by_threshold']
 
-# %% ../03_model_evaluation.ipynb 3
-import numpy as np
-import pandas as pd
-from sklearn.metrics import confusion_matrix
-import matplotlib.pyplot as plt
-
 # %% ../03_model_evaluation.ipynb 4
 def metrics_by_threshold(y_true, # Ground truth (correct) target values
                          y_proba, # Estimated probability as returned by a binary classifier
@@ -31,5 +25,13 @@ def metrics_by_threshold(y_true, # Ground truth (correct) target values
     cm_thr_df['accuracy'] = (cm_thr_df['tp'] + cm_thr_df['tn']) / (cm_thr_df['tp'] + cm_thr_df['fn'] + cm_thr_df['fp'] + cm_thr_df['tn'])
     cm_thr_df['f1'] = (2*cm_thr_df['tp']) / (2*cm_thr_df['tp'] + cm_thr_df['fn'] + cm_thr_df['fp'])
     cm_thr_df['specificity'] = cm_thr_df['tn'] / (cm_thr_df['tn'] + cm_thr_df['fp'])
+    
+    # Matthews correlation coefficient
+    num_mcc = (cm_thr_df['tp'] * cm_thr_df['tn']) - (cm_thr_df['fp'] * cm_thr_df['fn'])
+    subrad_mcc = ((cm_thr_df['tp'] + cm_thr_df['fp']) * 
+                  (cm_thr_df['tp'] + cm_thr_df['fn']) *
+                  (cm_thr_df['tn'] + cm_thr_df['fp']) *
+                  (cm_thr_df['tn'] + cm_thr_df['fn']))
+    cm_thr_df['mcc'] = num_mcc / np.sqrt(subrad_mcc)
    
     return cm_thr_df

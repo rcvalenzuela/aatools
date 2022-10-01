@@ -3,12 +3,6 @@
 # %% auto 0
 __all__ = ['metrics_by_threshold']
 
-# %% ../03_model_evaluation.ipynb 3
-import numpy as np
-import pandas as pd
-from sklearn.metrics import confusion_matrix
-import matplotlib.pyplot as plt
-
 # %% ../03_model_evaluation.ipynb 4
 def metrics_by_threshold(y_true, # Ground truth (correct) target values
                          y_proba, # Estimated probability as returned by a binary classifier
