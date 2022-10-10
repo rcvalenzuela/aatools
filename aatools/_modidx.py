@@ -15,5 +15,7 @@ d = { 'settings': { 'branch': 'master',
                              'aatools.eda.rr_corr': ('eda.html#rr_corr', 'aatools/eda.py'),
                              'aatools.eda.soa_graph': ('eda.html#soa_graph', 'aatools/eda.py'),
                              'aatools.eda.strength_of_assoc': ('eda.html#strength_of_assoc', 'aatools/eda.py')},
-            'aatools.model_evaluation': { 'aatools.model_evaluation.metrics_by_threshold': ( 'model_evaluation.html#metrics_by_threshold',
+            'aatools.model_evaluation': { 'aatools.model_evaluation.bin_class_ks': ( 'model_evaluation.html#bin_class_ks',
+                                                                                     'aatools/model_evaluation.py'),
+                                          'aatools.model_evaluation.metrics_by_threshold': ( 'model_evaluation.html#metrics_by_threshold',
                                                                                              'aatools/model_evaluation.py')}}}
