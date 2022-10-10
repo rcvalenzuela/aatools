@@ -1,9 +1,0 @@
-project:
-  output-dir: _docs
-
-website:
-  title: "aatools"
-  site-url: "https://rcvalenzuela.github.io/aatools"
-  description: "Utility tools for advanced analytics"
-  repo-branch: master
-  repo-url: "https://github.com/rcvalenzuela/aatools"
