@@ -1,0 +1,86 @@
+[
+  {
+    "objectID": "datasets.html",
+    "href": "datasets.html",
+    "title": "datasets",
+    "section": "",
+    "text": "The transport dataset was originally retrieved from the Kaggle datasets website. A description of it is available here.\n\nThe dataset contains around 50 individuals answers from a questionaire on their means of transport. For each answer we have the Age, Sex, Family Situation, If he has a car, If he has a bike and if he takes public transport\n\nThere is some information as well on the monthly income of the respondent\n\nsource\n\n\n\n load_transport ()\n\nLoads the transport dataset\nTo load the dataset simply call the function …\n\ntransport = load_transport()\n\n\ntransport.isna().sum()\n\nage          0\nsexe         7\nsitfam       0\nprincipal    0\nvoiture      4\nvelo         4\ncommun       4\nrevenu       3\ndtype: int64\n\n\n\n\n\n\nsource\n\n\n\n\n load_predictions ()\n\nLoads the transport dataset\n\npredictions = load_predictions()\n\n\npredictions.head()\n\n\n\n\n\n\n\n\ny_true\ny_proba\n\n\n\n\n0\n0\n0.283242\n\n\n1\n0\n0.397620\n\n\n2\n0\n0.417143\n\n\n3\n0\n0.376334\n\n\n4\n0\n0.299264"
+  },
+  {
+    "objectID": "datasets.html#transport-dataset",
+    "href": "datasets.html#transport-dataset",
+    "title": "datasets",
+    "section": "",
+    "text": "The transport dataset was originally retrieved from the Kaggle datasets website. A description of it is available here.\n\nThe dataset contains around 50 individuals answers from a questionaire on their means of transport. For each answer we have the Age, Sex, Family Situation, If he has a car, If he has a bike and if he takes public transport\n\nThere is some information as well on the monthly income of the respondent\n\nsource\n\n\n\n load_transport ()\n\nLoads the transport dataset\nTo load the dataset simply call the function …\n\ntransport = load_transport()\n\n\ntransport.isna().sum()\n\nage          0\nsexe         7\nsitfam       0\nprincipal    0\nvoiture      4\nvelo         4\ncommun       4\nrevenu       3\ndtype: int64\n\n\n\n\n\n\nsource\n\n\n\n\n load_predictions ()\n\nLoads the transport dataset\n\npredictions = load_predictions()\n\n\npredictions.head()\n\n\n\n\n\n\n\n\ny_true\ny_proba\n\n\n\n\n0\n0\n0.283242\n\n\n1\n0\n0.397620\n\n\n2\n0\n0.417143\n\n\n3\n0\n0.376334\n\n\n4\n0\n0.299264"
+  },
+  {
+    "objectID": "eda.html",
+    "href": "eda.html",
+    "title": "eda",
+    "section": "",
+    "text": "In univariate analysis we explore each variable by itself\n\n\nFor ratio variables the function plot_univariate_continuous generates a single plot showing all the basic information needed to describe it\n\nsource\n\n\n\n\n plot_univariate_continuous (df:pandas.core.frame.DataFrame, var:str,\n                             var_name:str, ax)\n\n\n\n\n\nType\nDetails\n\n\n\n\ndf\nDataFrame\nData\n\n\nvar\nstr\nVariable to plot\n\n\nvar_name\nstr\nVariable name\n\n\nax\n\nAxes on which to draw the plot\n\n\n\nTo see the function in action we use the diamonds dataset provided with seaborn\n\ndiamonds = sns.load_dataset('diamonds')\ndiamonds.head()\n\n\n\n\n\n\n\n\ncarat\ncut\ncolor\nclarity\ndepth\ntable\nprice\nx\ny\nz\n\n\n\n\n0\n0.23\nIdeal\nE\nSI2\n61.5\n55.0\n326\n3.95\n3.98\n2.43\n\n\n1\n0.21\nPremium\nE\nSI1\n59.8\n61.0\n326\n3.89\n3.84\n2.31\n\n\n2\n0.23\nGood\nE\nVS1\n56.9\n65.0\n327\n4.05\n4.07\n2.31\n\n\n3\n0.29\nPremium\nI\nVS2\n62.4\n58.0\n334\n4.20\n4.23\n2.63\n\n\n4\n0.31\nGood\nJ\nSI2\n63.3\n58.0\n335\n4.34\n4.35\n2.75\n\n\n\n\n\n\n\nThis dataset only includes variables with two levels of measurement (ratio and ordinal), the variables can be classified as,\n\ndiamonds_ratio = ['carat', 'depth', 'table', 'price', 'x', 'y', 'z']\ndiamonds_ordinal = ['cut', 'color', 'clarity']\n\nThe density plot of the carat feature is\n\nsns.kdeplot(data=diamonds, x='carat');\n\n\n\n\nWe create an axis in the whitegrid style and call plot_univariate_continuous\n\nwith sns.axes_style('whitegrid'):\n    fig, ax = plt.subplots(figsize=(8,4))\nplot_univariate_continuous(diamonds, 'carat', 'Carat', ax);\n\nfindfont: Font family ['Century Gothic'] not found. Falling back to DejaVu Sans.\nfindfont: Font family ['Century Gothic'] not found. Falling back to DejaVu Sans.\n\n\n\n\n\nThe resulting figure shows an histogram plot made using seaborn.histplot with stat='percent'. It includes a vertical line drawn at the mean of the data and uses colors to distiguish three groups: the first quartile, the fourth quartile and the second and third quartile (together)\n\n\n\nEach of the ordinal features have the following categories ordered from best to worst,\n\nfor feat in diamonds_ordinal:\n    print(f'Categories in {feat}:')\n    print(diamonds[feat].unique())\n    print('\\n')\n\nCategories in cut:\n['Ideal', 'Premium', 'Good', 'Very Good', 'Fair']\nCategories (5, object): ['Ideal', 'Premium', 'Very Good', 'Good', 'Fair']\n\n\nCategories in color:\n['E', 'I', 'J', 'H', 'F', 'G', 'D']\nCategories (7, object): ['D', 'E', 'F', 'G', 'H', 'I', 'J']\n\n\nCategories in clarity:\n['SI2', 'SI1', 'VS1', 'VS2', 'VVS2', 'VVS1', 'I1', 'IF']\nCategories (8, object): ['IF', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1']"
+  },
+  {
+    "objectID": "eda.html#univariate-analysis",
+    "href": "eda.html#univariate-analysis",
+    "title": "eda",
+    "section": "",
+    "text": "In univariate analysis we explore each variable by itself\n\n\nFor ratio variables the function plot_univariate_continuous generates a single plot showing all the basic information needed to describe it\n\nsource\n\n\n\n\n plot_univariate_continuous (df:pandas.core.frame.DataFrame, var:str,\n                             var_name:str, ax)\n\n\n\n\n\nType\nDetails\n\n\n\n\ndf\nDataFrame\nData\n\n\nvar\nstr\nVariable to plot\n\n\nvar_name\nstr\nVariable name\n\n\nax\n\nAxes on which to draw the plot\n\n\n\nTo see the function in action we use the diamonds dataset provided with seaborn\n\ndiamonds = sns.load_dataset('diamonds')\ndiamonds.head()\n\n\n\n\n\n\n\n\ncarat\ncut\ncolor\nclarity\ndepth\ntable\nprice\nx\ny\nz\n\n\n\n\n0\n0.23\nIdeal\nE\nSI2\n61.5\n55.0\n326\n3.95\n3.98\n2.43\n\n\n1\n0.21\nPremium\nE\nSI1\n59.8\n61.0\n326\n3.89\n3.84\n2.31\n\n\n2\n0.23\nGood\nE\nVS1\n56.9\n65.0\n327\n4.05\n4.07\n2.31\n\n\n3\n0.29\nPremium\nI\nVS2\n62.4\n58.0\n334\n4.20\n4.23\n2.63\n\n\n4\n0.31\nGood\nJ\nSI2\n63.3\n58.0\n335\n4.34\n4.35\n2.75\n\n\n\n\n\n\n\nThis dataset only includes variables with two levels of measurement (ratio and ordinal), the variables can be classified as,\n\ndiamonds_ratio = ['carat', 'depth', 'table', 'price', 'x', 'y', 'z']\ndiamonds_ordinal = ['cut', 'color', 'clarity']\n\nThe density plot of the carat feature is\n\nsns.kdeplot(data=diamonds, x='carat');\n\n\n\n\nWe create an axis in the whitegrid style and call plot_univariate_continuous\n\nwith sns.axes_style('whitegrid'):\n    fig, ax = plt.subplots(figsize=(8,4))\nplot_univariate_continuous(diamonds, 'carat', 'Carat', ax);\n\nfindfont: Font family ['Century Gothic'] not found. Falling back to DejaVu Sans.\nfindfont: Font family ['Century Gothic'] not found. Falling back to DejaVu Sans.\n\n\n\n\n\nThe resulting figure shows an histogram plot made using seaborn.histplot with stat='percent'. It includes a vertical line drawn at the mean of the data and uses colors to distiguish three groups: the first quartile, the fourth quartile and the second and third quartile (together)\n\n\n\nEach of the ordinal features have the following categories ordered from best to worst,\n\nfor feat in diamonds_ordinal:\n    print(f'Categories in {feat}:')\n    print(diamonds[feat].unique())\n    print('\\n')\n\nCategories in cut:\n['Ideal', 'Premium', 'Good', 'Very Good', 'Fair']\nCategories (5, object): ['Ideal', 'Premium', 'Very Good', 'Good', 'Fair']\n\n\nCategories in color:\n['E', 'I', 'J', 'H', 'F', 'G', 'D']\nCategories (7, object): ['D', 'E', 'F', 'G', 'H', 'I', 'J']\n\n\nCategories in clarity:\n['SI2', 'SI1', 'VS1', 'VS2', 'VVS2', 'VVS1', 'I1', 'IF']\nCategories (8, object): ['IF', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1']"
+  },
+  {
+    "objectID": "eda.html#bivariate-analysis",
+    "href": "eda.html#bivariate-analysis",
+    "title": "eda",
+    "section": "Bivariate analysis",
+    "text": "Bivariate analysis\nThe goal is a fuction that can calculate a measure of dependence between all the features in a given dataset.\n\nsource\n\nstrength_of_assoc\n\n strength_of_assoc (df:pandas.core.frame.DataFrame, ratio_vars:list=None,\n                    ordinal_vars:list=None, nominal_vars:list=None,\n                    binary_vars:list=None)\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ndf\nDataFrame\n\nData\n\n\nratio_vars\nlist\nNone\nColumns in df with ratio variables\n\n\nordinal_vars\nlist\nNone\nColumns in df with ordinal variables\n\n\nnominal_vars\nlist\nNone\nColumns in df with nominal variables\n\n\nbinary_vars\nlist\nNone\nColumns in df with binary variables\n\n\n\nWe say a variable has a ratio level of measurement if it is a variable for which ratios are meaningful. Ratio variables have all the properties of interval variables plus a real absolute zero.\nFor the diamonds dataset we have\n\ndiamonds_rcorr = strength_of_assoc(diamonds, diamonds_ratio)\ndiamonds_rcorr.head()\n\n\n\n\n\n\n\n\nfeat_1\nfeat_2\nvalue\nmetric\nassoc_strength\n\n\n\n\n20\ny\nz\n0.952006\nPearson correlation coefficient\nstrong\n\n\n2\ncarat\nprice\n0.921591\nPearson correlation coefficient\nstrong\n\n\n3\ncarat\nx\n0.975094\nPearson correlation coefficient\nstrong\n\n\n4\ncarat\ny\n0.951722\nPearson correlation coefficient\nstrong\n\n\n5\ncarat\nz\n0.953387\nPearson correlation coefficient\nstrong\n\n\n\n\n\n\n\nstrength_of_assoc returns the correlation between each of the n (n - 1) / 2 pair of variables where n is the number of ratio variables\n\nassert len(diamonds_rcorr.index) == 21\n\n\nsource\n\n\nsoa_graph\n\n soa_graph (cdf:pandas.core.frame.DataFrame, min_strength:str='strong')\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ncdf\nDataFrame\n\nA dataframe as output by ratio_corr\n\n\nmin_strength\nstr\nstrong\nThreshold for high correlation\n\n\n\n\ndiamonds_high_soa, diamonds_soa_graph = soa_graph(diamonds_rcorr)\n\n\nnx.draw(diamonds_soa_graph, with_labels=True)\n\n\n\n\n\nimport numpy as np\nfrom scipy.stats import chi2_contingency\n\ntable = np.array([[205534, 302607], [33395, 71466]])\ntable = np.array([[205534, 302607], [40896, 63965]])\n\nres = chi2_contingency(table)\n\n\nres\n\nChi2ContingencyResult(statistic=75.75518055236239, pvalue=3.2110752959071082e-18, dof=1, expected_freq=array([[204275.33128766, 303865.66871234],\n       [ 42154.66871234,  62706.33128766]]))\n\n\n\nres.statistic\n\nAttributeError: 'tuple' object has no attribute 'statistic'"
+  },
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "core",
+    "section": "",
+    "text": "class MLProject:\n    def __init__(self) -&gt; None:\n        pass\n\n\nclass SemanticDataFrame:\n    def __init__(self, df:pd.DataFrame, semantics:dict) -&gt; None:\n        self.df = df\n        self._sem_vars = [key for key in semantics['variables'].keys()]"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "aatools",
+    "section": "",
+    "text": "You can install the package from Pypi using,\npip install aatools\nor, if you prefer conda with,\nconda install -c rcvalenzuela aatools"
+  },
+  {
+    "objectID": "index.html#install",
+    "href": "index.html#install",
+    "title": "aatools",
+    "section": "",
+    "text": "You can install the package from Pypi using,\npip install aatools\nor, if you prefer conda with,\nconda install -c rcvalenzuela aatools"
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "aatools",
+    "section": "How to use",
+    "text": "How to use\nCurrently the package only provides one function plot_univariate_continuous which given a sample of data from a univariate random variable generates the histogram and adds information on the mean and the quartiles\nLook at the documentation of the package for information on how to use."
+  },
+  {
+    "objectID": "reports.html",
+    "href": "reports.html",
+    "title": "reports",
+    "section": "",
+    "text": "create_qmd_header\n\n create_qmd_header (title:str)\n\n\n\n\n\nType\nDetails\n\n\n\n\ntitle\nstr\nTitle of the document\n\n\nReturns\nstr\nyaml header qmd file\n\n\n\nFor example if the title is A basic quarto file then calling the function will render the following,\n\nprint(create_qmd_header('A basic quarto file'))\n\n---\ntitle: \"A basic quarto file\"\nformat:\n    html:\n        code-fold: true\njupyter: python3\n---\n\n\n\neda_report('test.qmd')"
+  },
+  {
+    "objectID": "model_evaluation.html",
+    "href": "model_evaluation.html",
+    "title": "model_evaluation",
+    "section": "",
+    "text": "source"
+  },
+  {
+    "objectID": "model_evaluation.html#k-s-statistic",
+    "href": "model_evaluation.html#k-s-statistic",
+    "title": "model_evaluation",
+    "section": "K-S Statistic",
+    "text": "K-S Statistic\n\nThe Kolmogorov–Smirnov test (K-S test or KS test) is a nonparametric test of the equality of continuous (or discontinuous), one-dimensional probability distributions that can be used to compare a sample with a reference probability distribution (one-sample K–S test), or to compare two samples (two-sample K–S test). In essence, the test answers the question What is the probability that this collection of samples could have been drawn from that probability distribution? or, in the second case, What is the probability that these two sets of samples were drawn from the same (but unknown) probability distribution?.\n— Kolgomorov-Smirnov Test\n\n\nNote that the two-sample test checks whether the two data samples come from the same distribution. This does not specify what that common distribution is (e.g. whether it’s normal or not normal). Again, tables of critical values have been published. A shortcoming of the univariate Kolmogorov–Smirnov test is that it is not very powerful because it is devised to be sensitive against all possible types of differences between two distribution functions.\n— Kolgomorov-Smirnov Test\n\nThe function bin_class_ks uses scipy ks_2samp() to test whether the distributions of the positive and negative classes from a binary classifier are from the same distribution\n\nsource\n\nbin_class_ks\n\n bin_class_ks (y_true, y_proba)\n\n\n\n\n\nDetails\n\n\n\n\ny_true\nGround truth (correct) target values {0,1}\n\n\ny_proba\nEstimated probability as returned by a binary classifier"
+  }
+]

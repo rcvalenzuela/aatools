@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="The core module provides a set of functions for exploratory data analysis">
+
+<title>aatools - eda</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="aatools - eda">
+<meta property="og:description" content="The core module provides a set of functions for exploratory data analysis">
+<meta property="og:image" content="https://rcvalenzuela.github.io/aatools/01_eda_files/figure-html/cell-5-output-1.png">
+<meta property="og:site-name" content="aatools">
+<meta property="og:image:height" content="432">
+<meta property="og:image:width" content="567">
+<meta name="twitter:title" content="aatools - eda">
+<meta name="twitter:description" content="The core module provides a set of functions for exploratory data analysis">
+<meta name="twitter:image" content="https://rcvalenzuela.github.io/aatools/01_eda_files/figure-html/cell-5-output-1.png">
+<meta name="twitter:image-height" content="432">
+<meta name="twitter:image-width" content="567">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">aatools</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./eda.html">eda</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">aatools</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">core</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./eda.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">eda</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">datasets</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_evaluation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">model_evaluation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./reports.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">reports</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#univariate-analysis" id="toc-univariate-analysis" class="nav-link active" data-scroll-target="#univariate-analysis">Univariate analysis</a>
+  <ul class="collapse">
+  <li><a href="#ratio-variables" id="toc-ratio-variables" class="nav-link" data-scroll-target="#ratio-variables">Ratio variables</a></li>
+  <li><a href="#plot_univariate_continuous" id="toc-plot_univariate_continuous" class="nav-link" data-scroll-target="#plot_univariate_continuous">plot_univariate_continuous</a></li>
+  <li><a href="#ordinal-features" id="toc-ordinal-features" class="nav-link" data-scroll-target="#ordinal-features">Ordinal features</a></li>
+  </ul></li>
+  <li><a href="#bivariate-analysis" id="toc-bivariate-analysis" class="nav-link" data-scroll-target="#bivariate-analysis">Bivariate analysis</a>
+  <ul class="collapse">
+  <li><a href="#strength_of_assoc" id="toc-strength_of_assoc" class="nav-link" data-scroll-target="#strength_of_assoc">strength_of_assoc</a></li>
+  <li><a href="#soa_graph" id="toc-soa_graph" class="nav-link" data-scroll-target="#soa_graph">soa_graph</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/rcvalenzuela/aatools/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">eda</h1>
+</div>
+
+<div>
+  <div class="description">
+    The core module provides a set of functions for exploratory data analysis
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="univariate-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="univariate-analysis">Univariate analysis</h2>
+<p>In univariate analysis we explore each variable by itself</p>
+<section id="ratio-variables" class="level3">
+<h3 class="anchored" data-anchor-id="ratio-variables">Ratio variables</h3>
+<p>For ratio variables the function <a href="https://rcvalenzuela.github.io/aatools/eda.html#plot_univariate_continuous"><code>plot_univariate_continuous</code></a> generates a single plot showing all the basic information needed to describe it</p>
+<hr>
+<p><a href="https://github.com/rcvalenzuela/aatools/blob/master/aatools/eda.py#L15" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="plot_univariate_continuous" class="level3">
+<h3 class="anchored" data-anchor-id="plot_univariate_continuous">plot_univariate_continuous</h3>
+<blockquote class="blockquote">
+<pre><code> plot_univariate_continuous (df:pandas.core.frame.DataFrame, var:str,
+                             var_name:str, ax)</code></pre>
+</blockquote>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>df</td>
+<td>DataFrame</td>
+<td>Data</td>
+</tr>
+<tr class="even">
+<td>var</td>
+<td>str</td>
+<td>Variable to plot</td>
+</tr>
+<tr class="odd">
+<td>var_name</td>
+<td>str</td>
+<td>Variable name</td>
+</tr>
+<tr class="even">
+<td>ax</td>
+<td></td>
+<td>Axes on which to draw the plot</td>
+</tr>
+</tbody>
+</table>
+<p>To see the function in action we use the <a href="https://ggplot2.tidyverse.org/reference/diamonds.html">diamonds</a> dataset provided with seaborn</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>diamonds <span class="op">=</span> sns.load_dataset(<span class="st">'diamonds'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>diamonds.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">carat</th>
+<th data-quarto-table-cell-role="th">cut</th>
+<th data-quarto-table-cell-role="th">color</th>
+<th data-quarto-table-cell-role="th">clarity</th>
+<th data-quarto-table-cell-role="th">depth</th>
+<th data-quarto-table-cell-role="th">table</th>
+<th data-quarto-table-cell-role="th">price</th>
+<th data-quarto-table-cell-role="th">x</th>
+<th data-quarto-table-cell-role="th">y</th>
+<th data-quarto-table-cell-role="th">z</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0.23</td>
+<td>Ideal</td>
+<td>E</td>
+<td>SI2</td>
+<td>61.5</td>
+<td>55.0</td>
+<td>326</td>
+<td>3.95</td>
+<td>3.98</td>
+<td>2.43</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0.21</td>
+<td>Premium</td>
+<td>E</td>
+<td>SI1</td>
+<td>59.8</td>
+<td>61.0</td>
+<td>326</td>
+<td>3.89</td>
+<td>3.84</td>
+<td>2.31</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0.23</td>
+<td>Good</td>
+<td>E</td>
+<td>VS1</td>
+<td>56.9</td>
+<td>65.0</td>
+<td>327</td>
+<td>4.05</td>
+<td>4.07</td>
+<td>2.31</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>0.29</td>
+<td>Premium</td>
+<td>I</td>
+<td>VS2</td>
+<td>62.4</td>
+<td>58.0</td>
+<td>334</td>
+<td>4.20</td>
+<td>4.23</td>
+<td>2.63</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>0.31</td>
+<td>Good</td>
+<td>J</td>
+<td>SI2</td>
+<td>63.3</td>
+<td>58.0</td>
+<td>335</td>
+<td>4.34</td>
+<td>4.35</td>
+<td>2.75</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>This dataset only includes variables with two levels of measurement (ratio and ordinal), the variables can be classified as,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>diamonds_ratio <span class="op">=</span> [<span class="st">'carat'</span>, <span class="st">'depth'</span>, <span class="st">'table'</span>, <span class="st">'price'</span>, <span class="st">'x'</span>, <span class="st">'y'</span>, <span class="st">'z'</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>diamonds_ordinal <span class="op">=</span> [<span class="st">'cut'</span>, <span class="st">'color'</span>, <span class="st">'clarity'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The density plot of the <code>carat</code> feature is</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sns.kdeplot(data<span class="op">=</span>diamonds, x<span class="op">=</span><span class="st">'carat'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="01_eda_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>We create an axis in the whitegrid style and call <a href="https://rcvalenzuela.github.io/aatools/eda.html#plot_univariate_continuous"><code>plot_univariate_continuous</code></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> sns.axes_style(<span class="st">'whitegrid'</span>):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">4</span>))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plot_univariate_continuous(diamonds, <span class="st">'carat'</span>, <span class="st">'Carat'</span>, ax)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>findfont: Font family ['Century Gothic'] not found. Falling back to DejaVu Sans.
+findfont: Font family ['Century Gothic'] not found. Falling back to DejaVu Sans.</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="01_eda_files/figure-html/cell-6-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>The resulting figure shows an histogram plot made using <code>seaborn.histplot</code> with <code>stat='percent'</code>. It includes a vertical line drawn at the mean of the data and uses colors to distiguish three groups: the first quartile, the fourth quartile and the second and third quartile (together)</p>
+</section>
+<section id="ordinal-features" class="level3">
+<h3 class="anchored" data-anchor-id="ordinal-features">Ordinal features</h3>
+<p>Each of the ordinal features have the following categories ordered from best to worst,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> feat <span class="kw">in</span> diamonds_ordinal:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'Categories in </span><span class="sc">{</span>feat<span class="sc">}</span><span class="ss">:'</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(diamonds[feat].unique())</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Categories in cut:
+['Ideal', 'Premium', 'Good', 'Very Good', 'Fair']
+Categories (5, object): ['Ideal', 'Premium', 'Very Good', 'Good', 'Fair']
+
+
+Categories in color:
+['E', 'I', 'J', 'H', 'F', 'G', 'D']
+Categories (7, object): ['D', 'E', 'F', 'G', 'H', 'I', 'J']
+
+
+Categories in clarity:
+['SI2', 'SI1', 'VS1', 'VS2', 'VVS2', 'VVS1', 'I1', 'IF']
+Categories (8, object): ['IF', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1']
+
+</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="bivariate-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="bivariate-analysis">Bivariate analysis</h2>
+<p>The goal is a fuction that can calculate a measure of dependence between all the features in a given dataset.</p>
+<hr>
+<p><a href="https://github.com/rcvalenzuela/aatools/blob/master/aatools/eda.py#L89" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="strength_of_assoc" class="level3">
+<h3 class="anchored" data-anchor-id="strength_of_assoc">strength_of_assoc</h3>
+<blockquote class="blockquote">
+<pre><code> strength_of_assoc (df:pandas.core.frame.DataFrame, ratio_vars:list=None,
+                    ordinal_vars:list=None, nominal_vars:list=None,
+                    binary_vars:list=None)</code></pre>
+</blockquote>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>df</td>
+<td>DataFrame</td>
+<td></td>
+<td>Data</td>
+</tr>
+<tr class="even">
+<td>ratio_vars</td>
+<td>list</td>
+<td>None</td>
+<td>Columns in <code>df</code> with ratio variables</td>
+</tr>
+<tr class="odd">
+<td>ordinal_vars</td>
+<td>list</td>
+<td>None</td>
+<td>Columns in <code>df</code> with ordinal variables</td>
+</tr>
+<tr class="even">
+<td>nominal_vars</td>
+<td>list</td>
+<td>None</td>
+<td>Columns in <code>df</code> with nominal variables</td>
+</tr>
+<tr class="odd">
+<td>binary_vars</td>
+<td>list</td>
+<td>None</td>
+<td>Columns in <code>df</code> with binary variables</td>
+</tr>
+</tbody>
+</table>
+<p>We say a variable has a ratio <a href="https://en.wikipedia.org/wiki/Level_of_measurement">level of measurement</a> if it is a variable for which ratios are meaningful. Ratio variables have all the properties of interval variables plus a real absolute zero.</p>
+<p>For the diamonds dataset we have</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>diamonds_rcorr <span class="op">=</span> strength_of_assoc(diamonds, diamonds_ratio)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>diamonds_rcorr.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">feat_1</th>
+<th data-quarto-table-cell-role="th">feat_2</th>
+<th data-quarto-table-cell-role="th">value</th>
+<th data-quarto-table-cell-role="th">metric</th>
+<th data-quarto-table-cell-role="th">assoc_strength</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>y</td>
+<td>z</td>
+<td>0.952006</td>
+<td>Pearson correlation coefficient</td>
+<td>strong</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>carat</td>
+<td>price</td>
+<td>0.921591</td>
+<td>Pearson correlation coefficient</td>
+<td>strong</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>carat</td>
+<td>x</td>
+<td>0.975094</td>
+<td>Pearson correlation coefficient</td>
+<td>strong</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4</td>
+<td>carat</td>
+<td>y</td>
+<td>0.951722</td>
+<td>Pearson correlation coefficient</td>
+<td>strong</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5</td>
+<td>carat</td>
+<td>z</td>
+<td>0.953387</td>
+<td>Pearson correlation coefficient</td>
+<td>strong</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p><a href="https://rcvalenzuela.github.io/aatools/eda.html#strength_of_assoc"><code>strength_of_assoc</code></a> returns the correlation between each of the <code>n (n - 1) / 2</code> pair of variables where <code>n</code> is the number of ratio variables</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(diamonds_rcorr.index) <span class="op">==</span> <span class="dv">21</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/rcvalenzuela/aatools/blob/master/aatools/eda.py#L115" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="soa_graph" class="level3">
+<h3 class="anchored" data-anchor-id="soa_graph">soa_graph</h3>
+<blockquote class="blockquote">
+<pre><code> soa_graph (cdf:pandas.core.frame.DataFrame, min_strength:str='strong')</code></pre>
+</blockquote>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cdf</td>
+<td>DataFrame</td>
+<td></td>
+<td>A dataframe as output by <code>ratio_corr</code></td>
+</tr>
+<tr class="even">
+<td>min_strength</td>
+<td>str</td>
+<td>strong</td>
+<td>Threshold for high correlation</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>diamonds_high_soa, diamonds_soa_graph <span class="op">=</span> soa_graph(diamonds_rcorr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>nx.draw(diamonds_soa_graph, with_labels<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="01_eda_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> chi2_contingency</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> np.array([[<span class="dv">205534</span>, <span class="dv">302607</span>], [<span class="dv">33395</span>, <span class="dv">71466</span>]])</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> np.array([[<span class="dv">205534</span>, <span class="dv">302607</span>], [<span class="dv">40896</span>, <span class="dv">63965</span>]])</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> chi2_contingency(table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>Chi2ContingencyResult(statistic=75.75518055236239, pvalue=3.2110752959071082e-18, dof=1, expected_freq=array([[204275.33128766, 303865.66871234],
+       [ 42154.66871234,  62706.33128766]]))</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>res.statistic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>AttributeError: 'tuple' object has no attribute 'statistic'</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
