@@ -1,11 +1,11 @@
 
 [project]
-name = "example_package_YOUR_USERNAME_HERE"
+name = "aatools"
 version = "0.0.1"
 authors = [
-  { name="Example Author", email="author@example.com" },
+  { name="Rene Valenzuela", email="rcvalenzuela@gmail.com" },
 ]
-description = "A small example package"
+description = "Tools supporting advanced analytics workflows"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
@@ -14,10 +14,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
-[project.urls]
-Homepage = "https://github.com/pypa/sampleproject"
-Issues = "https://github.com/pypa/sampleproject/issues"
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
