@@ -1,17 +1,29 @@
 
+import numpy as np
 import pandas as pd
+import scipy.stats as stats
 import matplotlib.pyplot as plt
 import seaborn as sns
+from core import SemanticDataFrame
 
 
-def plot_univariate_continuous(df:pd.DataFrame, # Data
-                               var:str, # Variable to plot
-                               var_name:str, # Variable name
-                               ax): # Axes on which to draw the plot
+def plot_univariate_ratio(sdf:SemanticDataFrame, var:str, ax):
+    """
+
+    Parameters
+    ----------
+    df
+        Data to plot
+    var
+        col_name of the variable to plot
+    ax
+        Axes on which to draw the plot
+    """
    
     ## Calculate the quantiles
-    df_plot = df[[var]].copy()
-    df_plot['qcut'] = pd.qcut(df_plot[var], [0, 0.25, 0.75, 1], labels=['1st', 'iqr', '4th'])
+    df_plot = sdf[[var]].copy()
+    df_plot['qcut'] = pd.qcut(df_plot[var], [0, 0.25, 0.75, 1], 
+                              labels=['1st', 'iqr', '4th'])
    
     # Define the palette
     # color palette as dictionary
@@ -33,12 +45,12 @@ def plot_univariate_continuous(df:pd.DataFrame, # Data
     ax.get_legend().remove()
    
     # Add a vertical line at the mean
-    var_mean = df[var].mean()
+    var_mean = sdf[var].mean()
    
     ax.axvline(var_mean)
-   
+    
     # Add labels
-    ax.set_xlabel(var_name, fontfamily='Century Gothic', fontsize=16)
+    ax.set_xlabel(sdf.vis_name(var), fontfamily='Century Gothic', fontsize=16)
     ax.set_ylabel('Percent', fontfamily='Century Gothic', fontsize=16)
    
     # Set tick font size
@@ -49,26 +61,38 @@ def plot_univariate_continuous(df:pd.DataFrame, # Data
     return ax
 
 
-def plot_univariate_nominal(df:pd.DataFrame, # Data
-                            var:str, # Variable to plot
-                            var_name:str, # Variable name
-                            ax): # Axes on which to draw the plot
-    pass
-
-
-def rr_corr(df:pd.DataFrame, # Data
-            ratio_vars:list): # Columns in `df` with ratio variables
+def plot_univariate_nominal(sdf:SemanticDataFrame, var:str, ax):
     """
-    Correlation between all pairs of ratio variables in `df`
+
+    Parameters
+    ----------
+    sdf
+        Data to plot
+    var
+        col_name of the variable to plot
+    ax
+        Axes on which to draw the plot
+    """
+
+
+def rr_corr(sdf:SemanticDataFrame):
+    """Correlation between all pairs of ratio variables in `sdf`
     
+    Parameters
+    ----------
+    sdf
+        Data to analyze
+
+    Notes
+    -----
     Uses the `corr` method of `pandas.DataFrame` 
     """
     
     # Extract ratio variables
-    df_corr = df[ratio_vars].copy()
+    df_corr = sdf[sdf.ratio_vars()].copy()
     
     # Calculate the correlation between ratio features in the dataset
-    df_corr = df.corr()
+    df_corr = df_corr.corr()
     
     # Reshape into a table removing redundant pairs
     df_corr = df_corr.where(np.triu(np.ones(df_corr.shape), 1).astype(bool))
@@ -85,18 +109,23 @@ def rr_corr(df:pd.DataFrame, # Data
     return df_corr.sort_values('assoc_strength', ascending=False)
 
 
-def strength_of_assoc(df:pd.DataFrame, # Data
-                      ratio_vars:list=None, # Columns in `df` with ratio variables
-                      ordinal_vars:list=None, # Columns in `df` with ordinal variables
-                      nominal_vars:list=None, # Columns in `df` with nominal variables
-                      binary_vars:list=None): # Columns in `df` with binary variables
+def strength_of_assoc(sdf:SemanticDataFrame):
+    """Calculate strength of association
+    
+    Parameters
+    ----------
+    sdf
+        Data to analyze
+    """
+
     # Initialize results dataframe
     soa_df = []
     
     ## Calculate strength of association between different variables
+    ratio_vars = sdf.ratio_vars()
     # Ratio - Ratio
     if ratio_vars:
-        soa_df.append(rr_corr(df, ratio_vars))
+        soa_df.append(rr_corr(sdf))
     
     # Ratio - Ordinal
     # Ratio - Nominal
@@ -111,27 +140,31 @@ def strength_of_assoc(df:pd.DataFrame, # Data
     return pd.concat(soa_df)
 
 
-def rb_corr(df:pd.DataFrame, # Data
-            ratio_vars:list, # Columns in `df` with ratio variables
-            binary_vars:list): # Columns in `df` with 2-level nominal variables (i.e. binary)
+def rb_corr(sdf:SemanticDataFrame):
+    """Correlation between all pairs of ratio and binary variables in `sdf`
     
-    bin_feat = df[binary_vars].copy()
+    Parameters
+    ----------
+    sdf
+        Data to analyze
+    """
+    
+    bin_vars = sdf.binary_vars()
+    ratio_vars = sdf.ratio_vars()
 
 
-def ro_corr(df:pd.DataFrame, # Data
-            ratio_vars:list, # Columns in `df` with ratio variables
-            ordinal_vars:list): # Columns in `df` with ordinal variables
+def ro_corr(sdf:SemanticDataFrame):
     """
     
     All the ordinal variables must have an ordered category dtype
     """
-    for ov in ordinal_vars:
-        if not df[ov].cat.ordered:
-            raise TypeError(f'{ov} is not ordered')
-    
+    ordinal_vars = sdf.ordinal_vars()
+    ratio_vars = sdf.ratio_vars()
+
+
     kendall_tau = []
     for rv,ov in zip(ratio_vars, ordinal_vars):
-        kendall_tau.append(stats.kendalltau(df[rv], df[ov]))
+        kendall_tau.append(stats.kendalltau(sdf[rv], sdf[ov]))
     
     return kendall_tau
 
