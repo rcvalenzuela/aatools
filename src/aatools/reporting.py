@@ -1,10 +1,15 @@
 
+from core import SemanticDataFrame
 import re
 
 
-def create_qmd_header(title:str  # Title of the document
-                     )->str:     # yaml header qmd file
-    
+def create_qmd_header(title:str)->str:
+    """ YAML header qmd file
+
+    Arguments
+    ---------
+    title: Title of the document
+    """
     header = f'''---
                  title: "{title}"
                  format:
