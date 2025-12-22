@@ -9,6 +9,8 @@ def metrics_by_threshold(y_true: pd.Series,
                          n_points:int=100) -> pd.DataFrame:
     """Compute binary classification metrics as a function of the decision threshold.
 
+    See the [design rationale](./explanation/model-evaluation.md) for why this implementation was chosen.
+
     Args:
         y_true: Ground truth (correct) target values
         y_proba: Estimated probability as returned by a binary classifier

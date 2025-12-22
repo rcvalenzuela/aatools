@@ -11,4 +11,6 @@ nav:
   - tutorials.md
   - How-To Guides: how-to-guides.md
   - reference.md
-  - explanation.md
+  - Explanation: 
+    - Design overview: explanation/index.md
+    - Model evaluation rationale: explanation/model-evaluation.md
