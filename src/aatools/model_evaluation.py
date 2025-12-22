@@ -1,12 +1,22 @@
 
 import numpy as np
 import pandas as pd
+from sklearn.metrics import confusion_matrix
 
 
-def metrics_by_threshold(y_true, # Ground truth (correct) target values
-                         y_proba, # Estimated probability as returned by a binary classifier
-                         n_points:int=100): # Number of points on which to evaluate
-    """Returns dataframe with several binary classification metrics as a function of the decision threshold"""
+def metrics_by_threshold(y_true: pd.Series, 
+                         y_proba: pd.Series,
+                         n_points:int=100) -> pd.DataFrame:
+    """Compute binary classification metrics as a function of the decision threshold.
+    
+    Args:
+        y_true: Ground truth (correct) target values
+        y_proba: Estimated probability as returned by a binary classifier
+        n_points: Number of points on which to evaluate
+    
+    Returns:
+        A `pandas.DataFrame` listing the value of each metric at the corresponding decision thresholds
+    """
     
     # Calculate tn, fp, fn, tp for different thresholds
     cm_thr = []
