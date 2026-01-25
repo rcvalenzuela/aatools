@@ -1,33 +1,38 @@
 
 import numpy as np
 import pandas as pd
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, roc_curve
 
 
 def metrics_by_threshold(y_true: pd.Series,
-                         y_proba: pd.Series,
-                         n_points:int=100) -> pd.DataFrame:
+                         y_proba: pd.Series) -> pd.DataFrame:
     """Compute binary classification metrics as a function of the decision threshold.
 
+    The returned metrics are the precision, recall, accuracy, F1-score, specificity and Matthews correlation coefficient
+    
     See the [design rationale](./explanation/model-evaluation.md) for why this implementation was chosen.
 
     Args:
         y_true: Ground truth (correct) target values
         y_proba: Estimated probability as returned by a binary classifier
-        n_points: Number of points on which to evaluate
 
     Returns:
         A `pandas.DataFrame` listing the value of each metric at the corresponding decision thresholds
     """
 
-    # Calculate tn, fp, fn, tp for different thresholds
-    cm_thr = []
-    for thr in np.linspace(0,1,100):
-        y_pred = np.where(y_proba >= thr, 1, 0)
-        tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
-        cm_thr.append([thr, tn, fp, fn, tp])
+    # Compute fpr and tpr at different threhsholds
+    fpr, tpr, cm_thr = roc_curve(y_true, y_proba)
 
-    cm_thr_df = pd.DataFrame(cm_thr, columns=['thr', 'tn', 'fp', 'fn', 'tp'])
+    # Compute the number of elements in each class
+    n_neg = np.sum(y_true == 0)
+    n_pos = np.sum(y_true == 1)
+
+
+    cm_thr_df = pd.DataFrame({'thr':cm_thr})
+    cm_thr_df['fp'] = fpr * n_neg
+    cm_thr_df['tp'] = tpr * n_pos
+    cm_thr_df['tn'] = n_neg - cm_thr_df['fp']
+    cm_thr_df['fn'] = n_pos - cm_thr_df['tp']
 
     ## Calculation of metrics
 
@@ -36,7 +41,7 @@ def metrics_by_threshold(y_true: pd.Series,
     cm_thr_df['accuracy'] = (cm_thr_df['tp'] + cm_thr_df['tn']) / (cm_thr_df['tp'] + cm_thr_df['fn'] + cm_thr_df['fp'] + cm_thr_df['tn'])
     cm_thr_df['f1'] = (2*cm_thr_df['tp']) / (2*cm_thr_df['tp'] + cm_thr_df['fn'] + cm_thr_df['fp'])
     cm_thr_df['specificity'] = cm_thr_df['tn'] / (cm_thr_df['tn'] + cm_thr_df['fp'])
-
+    
     # Matthews correlation coefficient
     num_mcc = (cm_thr_df['tp'] * cm_thr_df['tn']) - (cm_thr_df['fp'] * cm_thr_df['fn'])
     subrad_mcc = ((cm_thr_df['tp'] + cm_thr_df['fp']) *
